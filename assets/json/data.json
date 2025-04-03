@@ -1,0 +1,52 @@
+[
+  {
+    "left": {
+      "imageUrl": "assets/images/images_card/level1.0.png",
+      "color": 16306285,
+      "length": 5,
+      "fill": 3,
+      "name": "BRAIN"
+    },
+    "right": {
+      "imageUrl": "assets/images/images_card/level1.1.png",
+      "color": 13593194,
+      "length": 3,
+      "fill": 3,
+      "name": "BOW"
+    },
+    "description": "a seven color arch ",
+    "word": "RAINBOW",
+    "letters": ["O", "E", "R", "W", "N", "B", "A", "I", "P"],
+    "imageUrl": "assets/images/images_card/level1.2.png",
+    "leftLetter": 4,
+    "rightLetter": 3,
+    "middleLetter": 0,
+    "level": 1,
+    "coin": 100
+  },
+  {
+    "left": {
+      "imageUrl": "assets/images/images_card/level2.0.png",
+      "color": 13593194,
+      "length": 5,
+      "fill": 3,
+      "name": "PAN"
+    },
+    "right": {
+      "imageUrl": "assets/images/images_card/level2.1.png",
+      "color": 13593194,
+      "length": 3,
+      "fill": 3,
+      "name": "ANT"
+    },
+    "description": "short & quick breaths ",
+    "word": "PANT",
+    "letters": [ "T",  "N", "A",  "P"],
+    "imageUrl": "assets/images/images_card/level2.2.png",
+    "leftLetter": 1,
+    "rightLetter": 1,
+    "middleLetter": 2,
+    "level": 2,
+    "coin": 100
+  }
+]
