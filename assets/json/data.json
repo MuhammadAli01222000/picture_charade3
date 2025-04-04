@@ -2,21 +2,21 @@
   {
     "left": {
       "imageUrl": "assets/images/images_card/level1.0.png",
-      "color": 16306285,
+      "color": 5149110,
       "length": 5,
       "fill": 3,
       "name": "BRAIN"
     },
     "right": {
       "imageUrl": "assets/images/images_card/level1.1.png",
-      "color": 13593194,
+      "color": 12169187 ,
       "length": 3,
       "fill": 3,
       "name": "BOW"
     },
-    "description": "a seven color arch ",
-    "word": "RAINBOW",
-    "letters": ["O", "E", "R", "W", "N", "B", "A", "I", "P"],
+    "description": "a vessel or a container ",
+    "word": "BOWL",
+    "letters": ["O", "E" ,"W", "B",  "L"],
     "imageUrl": "assets/images/images_card/level1.2.png",
     "leftLetter": 4,
     "rightLetter": 3,
@@ -28,20 +28,20 @@
     "left": {
       "imageUrl": "assets/images/images_card/level2.0.png",
       "color": 13593194,
-      "length": 5,
+      "length": 3,
       "fill": 3,
       "name": "PAN"
     },
     "right": {
       "imageUrl": "assets/images/images_card/level2.1.png",
-      "color": 13593194,
+      "color":22714166 ,
       "length": 3,
       "fill": 3,
       "name": "ANT"
     },
     "description": "short & quick breaths ",
     "word": "PANT",
-    "letters": [ "T",  "N", "A",  "P"],
+    "letters": [ "T",  "N", "A",  "P","K"],
     "imageUrl": "assets/images/images_card/level2.2.png",
     "leftLetter": 1,
     "rightLetter": 1,
@@ -52,7 +52,7 @@
   {
     "left": {
       "imageUrl": "assets/images/images_card/level3.0.png",
-      "color": 13593188,
+      "color": 4322714,
       "length": 3,
       "fill": 3,
       "name": "CAR"
@@ -64,29 +64,29 @@
       "fill": 4,
       "name": "RING"
     },
-    "description": "CAR AND RING  ",
+    "description": "displaying kindness and concern  ",
     "word": "CARRING",
     "letters": [ "A",  "G", "N",  "R","I","C"],
     "imageUrl": "assets/images/images_card/level3.2.png",
-    "leftLetter": 1,
-    "rightLetter": 1,
-    "middleLetter": 2,
+    "leftLetter": 2,
+    "rightLetter": 3,
+    "middleLetter": 1,
     "level": 3,
     "coin": 100
   },
   {
     "left": {
       "imageUrl": "assets/images/images_card/level4.0.png",
-      "color": 13193188,
+      "color": 2271440,
       "length": 3,
-      "fill": 3,
+      "fill": 2,
       "name": "BEE"
     },
     "right": {
       "imageUrl": "assets/images/images_card/level4.1.png",
-      "color": 13592155,
+      "color": 15014227,
       "length": 3,
-      "fill": 4,
+      "fill": 3,
       "name": "EAR"
     },
     "description": "BEE AND EAR",
@@ -109,7 +109,7 @@
     },
     "right": {
       "imageUrl": "assets/images/images_card/level5.1.png",
-      "color": 13192155,
+      "color": 391086,
       "length": 3,
       "fill": 3,
       "name": "POT"
@@ -134,7 +134,7 @@
     },
     "right": {
       "imageUrl": "assets/images/images_card/level6.1.png",
-      "color": 13592255,
+      "color": 23925012,
       "length": 3,
       "fill": 3,
       "name": "INK"

@@ -5,6 +5,7 @@ import 'package:picture_charade3/model/picture_charade.dart';
 import 'package:just_audio/just_audio.dart';
 import '../core/theme/colors.dart';
 import '../core/theme/icons.dart';
+import '../core/widgets/card_button.dart';
 import '../core/widgets/icon_button.dart';
 import '../core/widgets/text_widget.dart';
 
@@ -31,37 +32,41 @@ class _GamePageState extends State<GamePage> {
     super.initState();
     placedLetters = List.filled(widget.items[index].word.length, null);
   }
+
   ///logic check answer
   void _checkAnswer() {
-
     String userAnswer = placedLetters.join();
     String correctAnswer = widget.items[index].word;
 
     if (userAnswer == correctAnswer) {
       coins += widget.items[index].coin;
-      CustomDialog.dialogCorrect(context, widget.items[index].imageUrl,widget.items[index].word);
+      CustomDialog.dialogCorrect(
+        context,
+        widget.items[index].imageUrl,
+        widget.items[index].word,
+      );
 
       setState(() {
         if (index < widget.items.length - 1) {
           index++; //keyngi savolga
           placedLetters = List.filled(widget.items[index].word.length, null);
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Tabriklayman yutdingiz.')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Tabriklayman yutdingiz.')));
         }
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Noto‘g‘ri javob')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Noto‘g‘ri javob')));
     }
   }
 
+  ///coin olish
   int coins = 0;
   @override
   Widget build(BuildContext context) {
-    ///coin olish
     /// level olish uchun
     int level = widget.items[index].level;
 
@@ -73,7 +78,7 @@ class _GamePageState extends State<GamePage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: Button(onPressed: _checkAnswer),
+        child: Button(onPressed: _checkAnswer, text: '',),
       ),
       appBar: _buildAppBar(coins: coins, level: level),
       body: Padding(
@@ -106,7 +111,8 @@ class _GamePageState extends State<GamePage> {
                             color: Color(leftColor),
                             child: Center(
                               child: Container(
-                                width: 50,
+                                /// todo fill uchun
+                                width: widget.items[index].left.fill * 15,
                                 height: 10,
                                 color: Colors.white,
                                 child: Row(
@@ -219,7 +225,7 @@ class _GamePageState extends State<GamePage> {
                 )
                 : Text(''),
 
-            /// Drop target
+            /// Drop target todo [ colorni ozgartir]
             Container(
               width: 300,
               height: 75,
@@ -242,11 +248,15 @@ class _GamePageState extends State<GamePage> {
                             margin: EdgeInsets.all(4),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              color:
-                                  placedLetters[i] != null
-                                      ? Color(leftColor)
-                                      : Colors.white,
-                              border: Border.all(color: Colors.black, width: 2),
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  (i ==widget.items[index].middleLetter) ? Color(leftColor) : Color(rightColor),
+                                  (i >= widget.items[index].right.fill) ? Color(rightColor) : Color(leftColor),
+                                ],
+                              ),
+                              border: Border.all(color: Colors.grey, width: 2),
                             ),
                             child: Center(
                               child: Text(
@@ -258,6 +268,7 @@ class _GamePageState extends State<GamePage> {
                               ),
                             ),
                           );
+
                         },
                       ),
                     );
@@ -405,36 +416,6 @@ class _GamePageState extends State<GamePage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class Button extends StatelessWidget {
-  final void Function() onPressed;
-  const Button({super.key, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 60,
-      height: 60,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.redAccent, Colors.blue],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-        ),
-        onPressed: onPressed,
-        child: Text(''),
       ),
     );
   }
