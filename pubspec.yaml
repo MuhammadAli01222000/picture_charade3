@@ -32,3 +32,4 @@ flutter:
    - assets/images/
    - assets/animation/splash_pages.json
    - assets/json/data.json
+   - assets/sound/

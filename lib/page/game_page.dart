@@ -27,11 +27,27 @@ class _GamePageState extends State<GamePage> {
   List<String?> placedLetters = [];
   bool description = false;
   final _player = AudioPlayer();
+///pause
+  void pause() {
+    _player.pause();
+  }
   @override
   void initState() {
     super.initState();
+    play();
     placedLetters = List.filled(widget.items[index].word.length, null);
   }
+  ///sound
+Future<void> play() async{
+    try{
+     await _player.setAsset('assets/sound/game_sound.mp3');
+     await _player.play();
+
+    }catch(s){
+      debugPrint("error $s");
+    }
+}
+
 
   ///logic check answer
   void _checkAnswer() {
@@ -78,7 +94,7 @@ class _GamePageState extends State<GamePage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: Button(onPressed: _checkAnswer, text: '',),
+        child: Button(onPressed: _checkAnswer, widget:Text( '')),
       ),
       appBar: _buildAppBar(coins: coins, level: level),
       body: Padding(
@@ -87,6 +103,8 @@ class _GamePageState extends State<GamePage> {
           children: [
             const SizedBox(height: 20),
             _light_button(),
+ const          SizedBox(height: 10,),
+            soundOf(),
             Center(
               child: Row(
                 children: [
@@ -248,14 +266,29 @@ class _GamePageState extends State<GamePage> {
                             margin: EdgeInsets.all(4),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  (i ==widget.items[index].middleLetter) ? Color(leftColor) : Color(rightColor),
-                                  (i >= widget.items[index].right.fill) ? Color(rightColor) : Color(leftColor),
-                                ],
-                              ),
+                              gradient:
+                                  (i == widget.items[index].middleLetter)
+                                      ? LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Color(
+                                            leftColor,
+                                          ),
+                                          Color(
+                                            rightColor,
+                                          ),
+                                        ],
+                                      )
+                                      : LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Colors
+                                              .blue,
+                                          Colors.blue,
+                                        ],
+                                      ),
                               border: Border.all(color: Colors.grey, width: 2),
                             ),
                             child: Center(
@@ -268,7 +301,6 @@ class _GamePageState extends State<GamePage> {
                               ),
                             ),
                           );
-
                         },
                       ),
                     );
@@ -322,6 +354,23 @@ class _GamePageState extends State<GamePage> {
             ),
             const SizedBox(height: 45),
           ],
+        ),
+      ),
+    );
+  }
+
+  ///icon button sound of
+  Align soundOf() {
+    return Align(
+      alignment: Alignment(0.8, 0.8),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.redAccent,
+          shape: BoxShape.circle,
+        ),
+        child: IconButton(
+          onPressed: () => pause(),
+          icon: Icon(Icons.volume_off, color: Colors.yellowAccent),
         ),
       ),
     );

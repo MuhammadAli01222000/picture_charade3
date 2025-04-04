@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
-  final String text;
+  final Widget widget;
   final void Function() onPressed;
-  const Button({super.key, required this.onPressed, required this.text});
+  const Button({super.key, required this.onPressed, required this.widget});
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +18,16 @@ class Button extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(12),
       ),
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+
       child: ElevatedButton(
+
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
         ),
         onPressed: onPressed,
-        child: Center(child: Text(text)),
+
+        child: Center(child:widget),
       ),
     );
   }
