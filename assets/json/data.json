@@ -48,5 +48,105 @@
     "middleLetter": 2,
     "level": 2,
     "coin": 100
+  },
+  {
+    "left": {
+      "imageUrl": "assets/images/images_card/level3.0.png",
+      "color": 13593188,
+      "length": 3,
+      "fill": 3,
+      "name": "CAR"
+    },
+    "right": {
+      "imageUrl": "assets/images/images_card/level3.1.png",
+      "color": 11592155,
+      "length": 4,
+      "fill": 4,
+      "name": "RING"
+    },
+    "description": "CAR AND RING  ",
+    "word": "CARRING",
+    "letters": [ "A",  "G", "N",  "R","I","C"],
+    "imageUrl": "assets/images/images_card/level3.2.png",
+    "leftLetter": 1,
+    "rightLetter": 1,
+    "middleLetter": 2,
+    "level": 3,
+    "coin": 100
+  },
+  {
+    "left": {
+      "imageUrl": "assets/images/images_card/level4.0.png",
+      "color": 13193188,
+      "length": 3,
+      "fill": 3,
+      "name": "BEE"
+    },
+    "right": {
+      "imageUrl": "assets/images/images_card/level4.1.png",
+      "color": 13592155,
+      "length": 3,
+      "fill": 4,
+      "name": "EAR"
+    },
+    "description": "BEE AND EAR",
+    "word": "BEAR",
+    "letters": [ "A",  "B", "E",  "U","X","R"],
+    "imageUrl": "assets/images/images_card/level4.2.png",
+    "leftLetter": 1,
+    "rightLetter": 1,
+    "middleLetter": 2,
+    "level": 3,
+    "coin": 100
+  },
+  {
+    "left": {
+      "imageUrl": "assets/images/images_card/level5.0.png",
+      "color": 14193188,
+      "length": 3,
+      "fill": 3,
+      "name": "TEA"
+    },
+    "right": {
+      "imageUrl": "assets/images/images_card/level5.1.png",
+      "color": 13192155,
+      "length": 3,
+      "fill": 3,
+      "name": "POT"
+    },
+    "description": "container with a spout",
+    "word": "TEAPOT",
+    "letters": [ "E",  "A", "O",  "T","P","R"],
+    "imageUrl": "assets/images/images_card/level5.2.png",
+    "leftLetter": 1,
+    "rightLetter": 1,
+    "middleLetter": 2,
+    "level": 3,
+    "coin": 100
+  },
+  {
+    "left": {
+      "imageUrl": "assets/images/images_card/level6.0.png",
+      "color": 12195148,
+      "length": 3,
+      "fill": 3,
+      "name": "PIN"
+    },
+    "right": {
+      "imageUrl": "assets/images/images_card/level6.1.png",
+      "color": 13592255,
+      "length": 3,
+      "fill": 3,
+      "name": "INK"
+    },
+    "description": "a color",
+    "word": "PINK",
+    "letters": [ "L",  "N", "K",  "Y","O","Q","I","P"],
+    "imageUrl": "assets/images/images_card/level6.2.png",
+    "leftLetter": 1,
+    "rightLetter": 1,
+    "middleLetter": 2,
+    "level": 3,
+    "coin": 100
   }
 ]

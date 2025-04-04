@@ -8,6 +8,9 @@ environment:
   sdk: ^3.7.2
 
 dependencies:
+  lottie: ^3.3.1
+  just_audio: ^0.9.46
+  google_fonts: ^6.2.1
   flutter:
     sdk: flutter
 
@@ -15,8 +18,7 @@ dependencies:
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
-  lottie: ^3.3.1
-  google_fonts: ^6.2.1
+
   flutter_test:
     sdk: flutter
 

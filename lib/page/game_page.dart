@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:picture_charade3/core/widgets/dialog.dart';
 import 'package:picture_charade3/model/picture_charade.dart';
-
+import 'package:just_audio/just_audio.dart';
 import '../core/theme/colors.dart';
 import '../core/theme/icons.dart';
 import '../core/widgets/icon_button.dart';
@@ -21,45 +22,46 @@ class GamePage extends StatefulWidget {
 int index = 0;
 
 class _GamePageState extends State<GamePage> {
+  /// resultni yegish  uchun list
   List<String?> placedLetters = [];
-
+  bool description = false;
+  final _player = AudioPlayer();
   @override
   void initState() {
     super.initState();
     placedLetters = List.filled(widget.items[index].word.length, null);
   }
-
   ///logic check answer
   void _checkAnswer() {
+
     String userAnswer = placedLetters.join();
     String correctAnswer = widget.items[index].word;
 
     if (userAnswer == correctAnswer) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('To‘g‘ri javob! Keyingi darajaga o‘tish.')),
-      );
+      coins += widget.items[index].coin;
+      CustomDialog.dialogCorrect(context, widget.items[index].imageUrl,widget.items[index].word);
+
       setState(() {
         if (index < widget.items.length - 1) {
-          index++; //keyngi savolga o'tsh
+          index++; //keyngi savolga
           placedLetters = List.filled(widget.items[index].word.length, null);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Tabriklaymiz! O‘yinni tugatdingiz.')),
+            SnackBar(content: Text('Tabriklayman yutdingiz.')),
           );
         }
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Noto‘g‘ri javob! Qayta urinib ko‘ring.')),
+        SnackBar(content: Text('Noto‘g‘ri javob')),
       );
     }
   }
 
+  int coins = 0;
   @override
   Widget build(BuildContext context) {
     ///coin olish
-    int coins = 0;
-
     /// level olish uchun
     int level = widget.items[index].level;
 
@@ -67,10 +69,11 @@ class _GamePageState extends State<GamePage> {
     int leftColor = 0xFF000000 | widget.items[index].left.color;
     int rightColor = 0xFF000000 | widget.items[index].right.color;
 
+    /// description ochish uchn
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child:Button()
+        child: Button(onPressed: _checkAnswer),
       ),
       appBar: _buildAppBar(coins: coins, level: level),
       body: Padding(
@@ -83,6 +86,7 @@ class _GamePageState extends State<GamePage> {
               child: Row(
                 children: [
                   Spacer(),
+
                   /// Left image
                   SizedBox(
                     width: 100,
@@ -106,11 +110,12 @@ class _GamePageState extends State<GamePage> {
                                 height: 10,
                                 color: Colors.white,
                                 child: Row(
+                                  /// todo img tagidagi sozlar sonini bildiruvchi circle lar
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     for (
                                       var i = 0;
-                                      i < widget.items[index].leftLetter;
+                                      i < widget.items[index].left.fill;
                                       i++
                                     )
                                       Expanded(
@@ -160,11 +165,12 @@ class _GamePageState extends State<GamePage> {
                                 height: 10,
                                 color: Colors.white,
                                 child: Row(
+                                  /// todo img tagidagi sozlar sonini bildiruvchi circle lar
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     for (
                                       var i = 0;
-                                      i < widget.items[index].rightLetter;
+                                      i < widget.items[index].right.fill;
                                       i++
                                     )
                                       Expanded(
@@ -194,6 +200,24 @@ class _GamePageState extends State<GamePage> {
               ),
             ),
             Spacer(),
+            description
+                ? SizedBox(
+                  width: 250,
+                  height: 40,
+                  child: Card(
+                    color: CupertinoColors.activeBlue,
+                    child: Center(
+                      child: Text(
+                        widget.items[index].description,
+                        style: TextStyle(
+                          color: AppColors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+                : Text(''),
 
             /// Drop target
             Container(
@@ -369,6 +393,9 @@ class _GamePageState extends State<GamePage> {
                 child: IconButton(
                   onPressed: () {
                     setState(() {
+                      description = !description;
+                      coins - 100;
+
                       /// -= 100;          todo result coin
                     });
                   },
@@ -382,12 +409,16 @@ class _GamePageState extends State<GamePage> {
     );
   }
 }
+
 class Button extends StatelessWidget {
-  const Button({super.key});
+  final void Function() onPressed;
+  const Button({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return     Container(
+    return Container(
+      width: 60,
+      height: 60,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [Colors.redAccent, Colors.blue],
@@ -402,9 +433,8 @@ class Button extends StatelessWidget {
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
         ),
-        onPressed: () {
-          },
-        child: Text("Play current level", style: TextStyle(color: Colors.white)),
+        onPressed: onPressed,
+        child: Text(''),
       ),
     );
   }
