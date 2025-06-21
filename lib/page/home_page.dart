@@ -19,45 +19,84 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Picture Charade")),
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(backroundImage, fit: BoxFit.cover),
+            child: Image.asset(
+              backroundImage,
+              fit: BoxFit.cover,
+            ),
           ),
-
+          Container(
+            color: Colors.black.withOpacity(0.4),
+          ),
           Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "Current Level: ${widget.items.first.level}",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Picture Charade",
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                          blurRadius: 10,
+                          color: Colors.black54,
+                          offset: Offset(2, 2),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Button(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => GamePage(items: widget.items),
+                  const SizedBox(height: 20),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 10,
+                    color: Colors.white.withOpacity(0.9),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        "Current Level: ${widget.items.first.level}",
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87,
+                        ),
                       ),
-                    );
-                  },
-                  widget: Icon(Icons.games, color: Colors.white),
-                ),
-
-                const SizedBox(height: 10),
-                Button(
-                  onPressed: () {},
-                  widget: Icon(Icons.home, color: Colors.white),
-                ),
-              ],
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Button(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => GamePage(items: widget.items),
+                            ),
+                          );
+                        },
+                        widget: const Icon(Icons.play_arrow, color: Colors.white),
+                      ),
+                      const SizedBox(width: 16),
+                      Button(
+                        onPressed: () {},
+                        widget: const Icon(Icons.home, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

@@ -9,7 +9,6 @@ import '../core/widgets/card_button.dart';
 import '../core/widgets/icon_button.dart';
 import '../core/widgets/text_widget.dart';
 
-/// coin img url
 const coin = 'assets/images/img.png';
 
 class GamePage extends StatefulWidget {
@@ -21,40 +20,53 @@ class GamePage extends StatefulWidget {
 }
 
 int index = 0;
-
+bool sound=false;
 class _GamePageState extends State<GamePage> {
-  /// resultni yegish  uchun list
+
   List<String?> placedLetters = [];
   bool description = false;
   final _player = AudioPlayer();
-///pause
+  int coins = 0;
+
   void pause() {
-    _player.pause();
+    setState(() {});
+    if (sound) {
+      _player.pause();
+      sound = false;
+    } else {
+      _player.play();
+      sound = true;
+    }
   }
+
   @override
   void initState() {
     super.initState();
     play();
     placedLetters = List.filled(widget.items[index].word.length, null);
   }
-  ///sound
-Future<void> play() async{
-    try{
-     await _player.setAsset('assets/sound/game_sound.mp3');
-     await _player.play();
 
-    }catch(s){
+  Future<void> play() async {
+    try {
+      await _player.setAsset('assets/sound/game_sound.mp3');
+      await _player.play();
+    } catch (s) {
       debugPrint("error $s");
     }
-}
+  }
 
+  @override
+  void dispose() {
+    _player.dispose();
+    super.dispose();
+  }
 
-  ///logic check answer
   void _checkAnswer() {
     String userAnswer = placedLetters.join();
     String correctAnswer = widget.items[index].word;
 
     if (userAnswer == correctAnswer) {
+      //coins+=100;
       coins += widget.items[index].coin;
       CustomDialog.dialogCorrect(
         context,
@@ -64,407 +76,253 @@ Future<void> play() async{
 
       setState(() {
         if (index < widget.items.length - 1) {
-          index++; //keyngi savolga
+          index++;
           placedLetters = List.filled(widget.items[index].word.length, null);
         } else {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Tabriklayman yutdingiz.')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Tabriklayman yutdingiz.')),
+          );
         }
       });
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Noto‘g‘ri javob')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Noto‘g‘ri javob')),
+      );
     }
   }
 
-  ///coin olish
-  int coins = 0;
   @override
   Widget build(BuildContext context) {
-    /// level olish uchun
     int level = widget.items[index].level;
-
-    ///rang olish uchun
     int leftColor = 0xFF000000 | widget.items[index].left.color;
     int rightColor = 0xFF000000 | widget.items[index].right.color;
 
-    /// description ochish uchn
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Button(onPressed: _checkAnswer, widget:Text( '')),
-      ),
-      appBar: _buildAppBar(coins: coins, level: level),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            _light_button(),
- const          SizedBox(height: 10,),
-            soundOf(),
-            Center(
-              child: Row(
+    return WillPopScope(
+      onWillPop: () async {
+        pause();
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: _buildAppBar(coins: coins, level: level),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Spacer(),
-
-                  /// Left image
-                  SizedBox(
-                    width: 100,
-                    height: 140,
-                    child: Card(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            widget.items[index].left.imageUrl,
-                            fit: BoxFit.contain,
-                            width: 100,
-                            height: 100,
-                          ),
-                          Container(
-                            height: 25,
-                            width: 100,
-                            color: Color(leftColor),
-                            child: Center(
-                              child: Container(
-                                /// todo fill uchun
-                                width: widget.items[index].left.fill * 15,
-                                height: 10,
-                                color: Colors.white,
-                                child: Row(
-                                  /// todo img tagidagi sozlar sonini bildiruvchi circle lar
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    for (
-                                      var i = 0;
-                                      i < widget.items[index].left.fill;
-                                      i++
-                                    )
-                                      Expanded(
-                                        child: Container(
-                                          width: 8,
-                                          height: 8,
-                                          margin: EdgeInsets.symmetric(
-                                            horizontal: 2,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Color(leftColor),
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-
-                  /// Right image
-                  SizedBox(
-                    width: 100,
-                    height: 140,
-                    child: Card(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            widget.items[index].right.imageUrl,
-                            fit: BoxFit.contain,
-                            width: 100,
-                            height: 100,
-                          ),
-                          Container(
-                            height: 25,
-                            width: 100,
-                            color: Color(rightColor),
-                            child: Center(
-                              child: Container(
-                                width: 50,
-                                height: 10,
-                                color: Colors.white,
-                                child: Row(
-                                  /// todo img tagidagi sozlar sonini bildiruvchi circle lar
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    for (
-                                      var i = 0;
-                                      i < widget.items[index].right.fill;
-                                      i++
-                                    )
-                                      Expanded(
-                                        child: Container(
-                                          width: 8,
-                                          height: 8,
-                                          margin: EdgeInsets.symmetric(
-                                            horizontal: 2,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Color(rightColor),
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Spacer(),
+                  _lightButton(),
+                  soundButton(),
                 ],
               ),
-            ),
-            Spacer(),
-            description
-                ? SizedBox(
-                  width: 250,
-                  height: 40,
-                  child: Card(
-                    color: CupertinoColors.activeBlue,
-                    child: Center(
-                      child: Text(
-                        widget.items[index].description,
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: _buildImageCard(widget.items[index].left.imageUrl, leftColor, widget.items[index].left.fill),
+                  ),
+                  const SizedBox(width: 12),
+                  Flexible(
+                    flex: 1,
+                    child: _buildImageCard(widget.items[index].right.imageUrl, rightColor, widget.items[index].right.fill),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              if (description)
+                Card(
+                  color: CupertinoColors.activeBlue,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      widget.items[index].description,
+                      style:  TextStyle(
+                        color: AppColors.white,
+                        fontWeight: FontWeight.bold,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                )
-                : Text(''),
-
-            /// Drop target todo [ colorni ozgartir]
-            Container(
-              width: 300,
-              height: 75,
-              color: Colors.blue.shade900,
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(widget.items[index].word.length, (i) {
-                    return Expanded(
-                      child: DragTarget<String>(
-                        onAccept: (letter) {
-                          setState(() {
-                            placedLetters[i] = letter;
-                          });
-                        },
-                        builder: (context, candidateData, rejectedData) {
-                          return Container(
-                            width: 50,
-                            height: 50,
-                            margin: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              gradient:
-                                  (i == widget.items[index].middleLetter)
-                                      ? LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: [
-                                          Color(
-                                            leftColor,
-                                          ),
-                                          Color(
-                                            rightColor,
-                                          ),
-                                        ],
-                                      )
-                                      : LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: [
-                                          Colors
-                                              .blue,
-                                          Colors.blue,
-                                        ],
-                                      ),
-                              border: Border.all(color: Colors.grey, width: 2),
-                            ),
-                            child: Center(
-                              child: Text(
-                                placedLetters[i] ?? "",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  }),
                 ),
-              ),
-            ),
-            Spacer(),
-
-            /// Draggable letters
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(widget.items[index].letters.length, (i) {
-                return Expanded(
-                  child: Draggable<String>(
-                    data: widget.items[index].letters[i],
-                    feedback: Material(
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Center(
-                          child: Text(
-                            widget.items[index].letters[i],
-                            style: TextStyle(fontSize: 24, color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      margin: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: CupertinoColors.activeBlue,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Center(
-                        child: Text(
-                          widget.items[index].letters[i],
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                        ),
-                      ),
-                    ),
+              const SizedBox(height: 12),
+              _buildDropTarget(leftColor, rightColor),
+              const SizedBox(height: 16),
+              _buildDraggableLetters(),
+              const SizedBox(height: 100),
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                );
-              }),
-            ),
-            const SizedBox(height: 45),
-          ],
+                ),
+                onPressed: _checkAnswer,
+                icon: const Icon(Icons.check, color: Colors.white),
+                label: const Text("See the result ", style: TextStyle(color: Colors.white)),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  ///icon button sound of
-  Align soundOf() {
-    return Align(
-      alignment: Alignment(0.8, 0.8),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.redAccent,
-          shape: BoxShape.circle,
-        ),
-        child: IconButton(
-          onPressed: () => pause(),
-          icon: Icon(Icons.volume_off, color: Colors.yellowAccent),
+  Widget _buildImageCard(String imageUrl, int color, int fill) {
+    return SizedBox(
+      height: 320,
+      child: Card(
+        color: AppColors.white,
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+        child: Container(
+
+          width: double.infinity,
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              SizedBox( height : 270,child: Image.asset(imageUrl, height: 120, fit: BoxFit.contain)),
+              const SizedBox(height: 8),
+              LinearProgressIndicator(
+                value: fill / 10,
+                color: Color(color),
+                backgroundColor: Colors.grey.shade300,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  ///appbar
-  AppBar _buildAppBar({required int coins, required int level}) {
-    return AppBar(
-      backgroundColor: Colors.white70,
-      elevation: 0,
-      title: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.transparent,
-            ),
-            child: TextWidgetLevel(level: level),
-          ),
-          SizedBox(width: 10),
-          Expanded(
-            child: Align(
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: 120,
-                    height: 45,
-                    child: Card(
-                      color: AppColors.grey,
-
-                      child: Row(
-                        children: [
-                          SizedBox(width: 9),
-
-                          SizedBox(
-                            height: 35,
-                            child: Image.asset(coin, fit: BoxFit.contain),
-                          ),
-                          SizedBox(width: 15),
-                          TextWidgetCoin(coins: coins),
-                        ],
-                      ),
-                    ),
+  Widget _buildDropTarget(int leftColor, int rightColor) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.blue.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.blue.shade300),
+      ),
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 8,
+        children: List.generate(widget.items[index].word.length, (i) {
+          final isMiddle = i == widget.items[index].middleLetter;
+          return DragTarget<String>(
+            onAccept: (letter) => setState(() => placedLetters[i] = letter),
+            builder: (context, candidateData, rejectedData) {
+              return Container(
+                width: 50,
+                height: 60,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: isMiddle
+                        ? [Color(leftColor), Color(rightColor)]
+                        : [Colors.blue, Colors.blueAccent],
                   ),
-                ],
-              ),
-            ),
+                ),
+                child: Text(
+                  placedLetters[i] ?? '',
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+              );
+            },
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget _buildDraggableLetters() {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      alignment: WrapAlignment.center,
+      children: widget.items[index].letters.map((letter) {
+        return Draggable<String>(
+          data: letter,
+          feedback: Material(
+            color: Colors.transparent,
+            child: _letterBox(letter, drag: true),
           ),
+          childWhenDragging: Opacity(
+            opacity: 0.3,
+            child: _letterBox(letter),
+          ),
+          child: _letterBox(letter),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _letterBox(String letter, {bool drag = false}) {
+    return Container(
+      width: 50,
+      height: 50,
+      decoration: BoxDecoration(
+        color: drag ? Colors.blueAccent : CupertinoColors.activeBlue,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          if (drag)
+            const BoxShadow(
+              color: Colors.black26,
+              blurRadius: 4,
+              offset: Offset(2, 2),
+            )
         ],
       ),
-
-      actions: [
-        SizedBox(width: 15),
-
-        AppIconButton(
-          colorIcon: AppColors.black,
-          colorBackround: AppColors.black,
-          icon: AppIcons.menu,
-          function: () {},
-          radius: 2,
+      child: Center(
+        child: Text(
+          letter,
+          style: const TextStyle(fontSize: 20, color: Colors.white),
         ),
-      ],
+      ),
     );
   }
 
-  ///o'ng tarafdagi yashil button
-  Align _light_button() {
-    return Align(
-      alignment: Alignment(0.8, -0.9),
-      child: SizedBox(
-        width: 50,
-        height: 50,
-        child: Stack(
-          children: [
-            Card(
-              color: Colors.green,
-              child: Center(
-                child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      description = !description;
-                      coins - 100;
+  Widget soundButton() {
+    return IconButton(
+      onPressed: pause,
+      icon:  Icon(sound? Icons.volume_down: Icons.volume_off, color: Colors.redAccent),
+    );
+  }
 
-                      /// -= 100;          todo result coin
-                    });
-                  },
-                  icon: Icon(Icons.lightbulb, color: AppColors.white),
-                ),
-              ),
-            ),
-          ],
-        ),
+  Widget _lightButton() {
+    return IconButton(
+      onPressed: () {
+        setState(() {
+          description = !description;
+          coins = coins - 100;
+        });
+      },
+      icon: const Icon(Icons.lightbulb, color: Colors.green),
+    );
+  }
+
+  AppBar _buildAppBar({required int coins, required int level}) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 1,
+      title: Row(
+        children: [
+          TextWidgetLevel(level: level),
+          const Spacer(),
+          Row(
+            children: [
+              Image.asset(coin, height: 24),
+              const SizedBox(width: 8),
+              TextWidgetCoin(coins: coins),
+            ],
+          ),
+        ],
       ),
     );
   }

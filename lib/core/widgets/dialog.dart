@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:picture_charade3/core/core/app_routes.dart';
 import 'package:picture_charade3/core/theme/icons.dart';
+import 'package:picture_charade3/page/splash_page.dart';
 
 import '../../page/home_page.dart';
 import '../theme/colors.dart';
@@ -27,7 +28,7 @@ sealed class CustomDialog {
                   Spacer(),
                   Center(
                     child: Text(
-                      "ORTGA QAYTMOQCHIMISIZ",
+                      "ARE YOU GOING BACK?",
                       style: GoogleFonts.russoOne(
                         color: Colors.red,
                         fontWeight: FontWeight.bold,
@@ -62,9 +63,7 @@ sealed class CustomDialog {
                             Navigator.pushReplacement<void, void>(
                               context,
                               MaterialPageRoute<void>(
-                                builder:
-                                    (BuildContext context) =>
-                                        HomePage(items: []),
+                                builder: (BuildContext context) => SplashPage(),
                               ),
                             );
                           },
@@ -74,7 +73,7 @@ sealed class CustomDialog {
                           ),
                         ),
                       ),
-                      SizedBox(width: 20),
+                    const   SizedBox(width: 20),
                       Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -164,7 +163,7 @@ sealed class CustomDialog {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HomePage(items: []),
+                                builder: (context) => SplashPage(),
                               ),
                             );
                           },

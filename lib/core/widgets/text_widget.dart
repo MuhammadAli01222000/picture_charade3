@@ -29,7 +29,7 @@ class TextWidgetCoin extends StatelessWidget {
     return Text(
       "$coins",
       style: TextStyle(
-        color: AppColors.white,
+        color: AppColors.black,
         fontWeight: FontWeight.bold,
       ),
     );
